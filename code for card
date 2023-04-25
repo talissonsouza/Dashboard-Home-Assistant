@@ -1,0 +1,332 @@
+#DashBoard Home Assistant#
+
+# First - install HACS and this list frontend:
+# Vertical Stack In Card
+# Mushroom Themes
+# Mushroom
+# swipe card
+
+
+#Two - create your first card e edit your entities:
+
+type: vertical-stack
+cards:
+  - type: horizontal-stack
+    cards:
+      - type: custom:swipe-card
+        cards:
+          - type: custom:vertical-stack-in-card
+            title: Sala
+            cards:
+              - type: horizontal-stack
+                cards:
+                  - type: custom:mushroom-entity-card
+                    entity: camera.10_0_0_67
+                    icon: mdi:cctv
+                    icon_color: purple
+                    layout: vertical
+                    hold_action:
+                      action: none
+                    tap_action:
+                      action: more-info
+                    primary_info: none
+                    secondary_info: name
+                    name: Câmera
+                  - type: custom:mushroom-template-card
+                    primary: ''
+                    secondary: >-
+                      {% if
+                      is_state('binary_sensor.sensor_porta_sala_contact','off')
+                      %}
+                        Fechado
+                      {% elif
+                      is_state('binary_sensor.sensor_porta_sala_contact','on')%}
+                        Aberto            
+                      {% endif %}            
+                    layout: vertical
+                    entity: binary_sensor.sensor_porta_sala_contact
+                    icon_color: >-
+                      {% if
+                      is_state('binary_sensor.sensor_porta_sala_contact','on')%}
+                        red 
+                      {%endif%} {% if
+                      is_state('binary_sensor.sensor_porta_sala_contact','off')%}
+                        green
+                      {%endif%}
+                    icon: >-
+                      {% if
+                      is_state('binary_sensor.sensor_porta_sala_contact','off')
+                      %}
+                        mdi:door-closed-lock
+                      {% elif
+                      is_state('binary_sensor.sensor_porta_sala_contact','on')
+                      %}
+                        mdi:door-open
+                      {% else %}
+                        mdi:progress-question
+                      {% endif %}
+                    tap_action:
+                      action: more-info
+                    hold_action:
+                      action: none
+                    double_tap_action:
+                      action: none
+                    badge_color: ''
+                    badge_icon: ''
+                    fill_container: true
+                  - type: custom:mushroom-template-card
+                    entity: weather.forecast_casa
+                    primary: ''
+                    secondary: Tempo
+                    icon: mdi:weather-cloudy
+                    icon_color: light-blue
+                    layout: vertical
+                    badge_color: ''
+                    badge_icon: ''
+                    fill_container: true
+                    tap_action:
+                      action: more-info
+                  - type: custom:mushroom-template-card
+                    primary: ''
+                    secondary: '{{states("sensor.temperatura_am2301_temperature")}}°'
+                    icon: mdi:thermometer
+                    layout: vertical
+                    entity: sensor.sensor_clima_quarto_temperature
+                    icon_color: light-blue
+                    content: >-
+                      {% if
+                      is_state('sensor.temperatura_am2301_temperature','unknown')%}
+                        -
+                      {% else %}
+                        {{states('sensor.temperatura_am2301_temperature')}}°
+                      {% endif %}  
+                    tap_action:
+                      action: more-info
+                    hold_action:
+                      action: none
+                    double_tap_action:
+                      action: none
+                    badge_color: ''
+                    badge_icon: ''
+                    fill_container: true
+                  - type: custom:mushroom-template-card
+                    primary: ''
+                    secondary: '{{states("sensor.temperatura_am2301_humidity")}}%'
+                    icon: mdi:water-percent
+                    layout: vertical
+                    entity: sensor.sensor_clima_quarto_humidity
+                    icon_color: light-blue
+                    content: >-
+                      {% if
+                      is_state('sensor.temperatura_am2301_humidity','unknown')%}
+                        -
+                      {% else %}
+                        {{states('sensor.temperatura_am2301_humidity')}}°
+                      {% endif %}  
+                    tap_action:
+                      action: more-info
+                    hold_action:
+                      action: none
+                    double_tap_action:
+                      action: none
+                    badge_color: ''
+                    badge_icon: ''
+                    fill_container: true
+              - type: horizontal-stack
+                cards:
+                  - type: custom:mushroom-entity-card
+                    entity: input_boolean.trigger_tv_sala
+                    icon: mdi:television
+                    icon_color: teal
+                    layout: vertical
+                    hold_action:
+                      action: navigate
+                      navigation_path: tv_sala
+                    tap_action:
+                      action: toggle
+                    primary_info: none
+                    secondary_info: name
+                    name: TV
+                  - type: custom:mushroom-entity-card
+                    entity: switch.tw_escritorio
+                    icon: mdi:speaker-multiple
+                    icon_color: teal
+                    layout: vertical
+                    hold_action:
+                      action: none
+                    tap_action:
+                      action: toggle
+                    primary_info: none
+                    secondary_info: name
+                    name: Som
+                  - type: custom:mushroom-entity-card
+                    entity: group.all_devices_sala
+                    icon: mdi:lamps
+                    icon_color: yellow
+                    layout: vertical
+                    hold_action:
+                      action: more-info
+                    tap_action:
+                      action: toggle
+                    primary_info: none
+                    secondary_info: name
+                    name: Luzes
+                  - type: custom:mushroom-entity-card
+                    entity: switch.tw_ventilador
+                    icon: mdi:air-conditioner
+                    icon_color: blue
+                    layout: vertical
+                    hold_action:
+                      action: more-info
+                    tap_action:
+                      action: toggle
+                    primary_info: none
+                    secondary_info: name
+                    name: Clima
+                  - type: custom:mushroom-entity-card
+                    entity: switch.sw_quarto_3
+                    icon: mdi:curtains
+                    icon_color: pink
+                    layout: vertical
+                    hold_action:
+                      action: more-info
+                    tap_action:
+                      action: toggle
+                    primary_info: none
+                    secondary_info: name
+                    name: Cortina
+          - type: custom:vertical-stack-in-card
+            title: Luzes
+            cards:
+              - type: horizontal-stack
+                cards:
+                  - type: custom:mushroom-template-card
+                    primary: ''
+                    secondary: Perfil
+                    icon: mdi:led-strip-variant
+                    layout: vertical
+                    entity: light.led
+                    icon_color: |-
+                      {% if is_state('light.led','on')%}
+                        amber 
+                      {%endif%} {% if is_state('light.led','off')%}
+                        grey
+                      {%endif%}
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: more-info
+                    double_tap_action:
+                      action: none
+                    badge_color: ''
+                    badge_icon: ''
+                    fill_container: true
+                  - type: custom:mushroom-template-card
+                    primary: ''
+                    secondary: Painel
+                    icon: mdi:lightbulb-spot
+                    layout: vertical
+                    entity: switch.sonoff_10011b431a
+                    icon_color: >-
+                      {% if is_state('switch.sonoff_10011b431a','on')%}
+                        amber 
+                      {%endif%} {% if
+                      is_state('switch.sonoff_10011b431a','off')%}
+                        grey
+                      {%endif%}
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: more-info
+                    double_tap_action:
+                      action: none
+                    badge_color: ''
+                    badge_icon: ''
+                    fill_container: true
+                  - type: custom:mushroom-template-card
+                    primary: ''
+                    secondary: Teto
+                    icon: mdi:ceiling-fan-light
+                    layout: vertical
+                    entity: switch.sw_teto_sala
+                    icon_color: |-
+                      {% if is_state('switch.sw_teto_sala','on')%}
+                        amber 
+                      {%endif%} {% if is_state('switch.sw_teto_sala','off')%}
+                        grey
+                      {%endif%}
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: more-info
+                    double_tap_action:
+                      action: none
+                    badge_color: ''
+                    badge_icon: ''
+                    fill_container: true
+              - type: horizontal-stack
+                cards:
+                  - type: custom:mushroom-template-card
+                    primary: ''
+                    secondary: Tudo
+                    icon: mdi:lamps
+                    layout: vertical
+                    entity: group.all_devices_sala
+                    icon_color: |-
+                      {% if is_state('light.led','on')%}
+                        amber 
+                      {%endif%} {% if is_state('light.led','off')%}
+                        grey
+                      {%endif%}
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: more-info
+                    double_tap_action:
+                      action: none
+                    badge_color: ''
+                    badge_icon: ''
+                    fill_container: true
+                  - type: custom:mushroom-template-card
+                    primary: ''
+                    secondary: Relax
+                    icon: mdi:lightbulb-night
+                    layout: vertical
+                    entity: switch.sonoff_10011b431a
+                    icon_color: >-
+                      {% if is_state('switch.sonoff_10011b431a','on')%}
+                        amber 
+                      {%endif%} {% if
+                      is_state('switch.sonoff_10011b431a','off')%}
+                        grey
+                      {%endif%}
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: more-info
+                    double_tap_action:
+                      action: none
+                    badge_color: ''
+                    badge_icon: ''
+                    fill_container: true
+                  - type: custom:mushroom-template-card
+                    primary: ''
+                    secondary: Estudo
+                    icon: mdi:chair-rolling
+                    layout: vertical
+                    entity: switch.sw_teto_sala
+                    icon_color: |-
+                      {% if is_state('switch.sw_teto_sala','on')%}
+                        amber 
+                      {%endif%} {% if is_state('switch.sw_teto_sala','off')%}
+                        grey
+                      {%endif%}
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: more-info
+                    double_tap_action:
+                      action: none
+                    badge_color: ''
+                    badge_icon: ''
+                    fill_container: true
